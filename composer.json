@@ -1,0 +1,97 @@
+{
+    "name": "hosmelq/laravel-search-syntax-parser",
+    "description": "Turn validated search queries into Laravel Eloquent filters.",
+    "license": "MIT",
+    "keywords": [
+        "eloquent",
+        "hosmelq",
+        "laravel",
+        "laravel-search-syntax-parser",
+        "php",
+        "query-parser",
+        "search",
+        "search-syntax",
+        "search-syntax-parser"
+    ],
+    "authors": [
+        {
+            "name": "Hosmel Quintana",
+            "email": "hosmelq@gmail.com"
+        }
+    ],
+    "homepage": "https://hosmelq.com/docs/laravel-search-syntax-parser",
+    "support": {
+        "docs": "https://hosmelq.com/docs/laravel-search-syntax-parser"
+    },
+    "require": {
+        "php": "^8.4",
+        "hosmelq/search-syntax-parser": "^3.0",
+        "illuminate/contracts": "^13.42.0",
+        "illuminate/database": "^13.42.0",
+        "illuminate/support": "^13.42.0",
+        "illuminate/translation": "^13.42.0",
+        "illuminate/validation": "^13.42.0",
+        "spatie/laravel-package-tools": "^1.93.3"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.57.0",
+        "hosmelq/php-coding-standard": "^1.5.0",
+        "larastan/larastan": "^3.15.0",
+        "orchestra/testbench": "^11.3.0",
+        "pestphp/pest": "^5.3.6",
+        "pestphp/pest-plugin-agent": "^5.0.0",
+        "pestphp/pest-plugin-rector": "^5.0.6",
+        "shipmonk/composer-dependency-analyser": "^1.8.4"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "HosmelQ\\SearchSyntaxParser\\Laravel\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "HosmelQ\\SearchSyntaxParser\\Laravel\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "HosmelQ\\SearchSyntaxParser\\Laravel\\SearchSyntaxServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "ecs": "ecs check --fix",
+        "phpstan": "phpstan analyse --memory-limit=4G",
+        "rector": "rector",
+        "test": "pest",
+        "test-coverage": "pest --coverage",
+        "test:mariadb": "DB_CONNECTION=mariadb DB_HOST=127.0.0.1 DB_PORT=33408 DB_DATABASE=search_syntax DB_USERNAME=search_syntax DB_PASSWORD=search_syntax DB_COLLATION=utf8mb4_unicode_ci pest",
+        "test:mysql": "DB_CONNECTION=mysql DB_HOST=127.0.0.1 DB_PORT=33406 DB_DATABASE=search_syntax DB_USERNAME=search_syntax DB_PASSWORD=search_syntax DB_COLLATION=utf8mb4_0900_ai_ci pest",
+        "test:pgsql": "DB_CONNECTION=pgsql DB_HOST=127.0.0.1 DB_PORT=33407 DB_DATABASE=search_syntax DB_USERNAME=search_syntax DB_PASSWORD=search_syntax pest",
+        "test:sqlite": "DB_CONNECTION=sqlite DB_DATABASE=:memory: pest"
+    },
+    "scripts-descriptions": {
+        "ecs": "Runs ECS.",
+        "phpstan": "Runs PHPStan analyse.",
+        "rector": "Runs Rector.",
+        "test": "Runs the Pest test suite.",
+        "test-coverage": "Runs the Pest test suite with code coverage.",
+        "test:mariadb": "Runs the Pest test suite on the dedicated MariaDB database.",
+        "test:mysql": "Runs the Pest test suite on the dedicated MySQL database.",
+        "test:pgsql": "Runs the Pest test suite on the dedicated PostgreSQL database.",
+        "test:sqlite": "Runs the Pest test suite on SQLite in memory."
+    },
+    "$schema": "https://getcomposer.org/schema.json"
+}

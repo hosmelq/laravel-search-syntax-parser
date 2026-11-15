@@ -1,0 +1,158 @@
+name: Continuous integration
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Quality checks
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Set up PHP
+        uses: hosmelq/.github/.github/actions/php-setup@32f4a95b53649f1634b195193a61bb56a6b26d50 # main
+        with:
+          php-tools: cs2pr
+          php-version: '8.4'
+        env:
+          fail-fast: true
+
+      - name: Install composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Check composer
+        run: composer normalize --dry-run
+
+      - name: Check code quality
+        run: vendor/bin/rector --ansi --dry-run
+
+      - name: Check code style
+        run: vendor/bin/ecs check
+
+      - name: Check static code
+        run: composer phpstan
+
+      - name: Check unused composer dependencies
+        run: vendor/bin/composer-dependency-analyser
+
+  tests:
+    name: PHP ${{ matrix.php }} / ${{ matrix.driver }} (${{ matrix.dependencies }})
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        dependencies: [prefer-stable]
+        driver: [sqlite, mysql, mariadb, pgsql]
+        include:
+          - dependencies: prefer-lowest
+            driver: sqlite
+            php: '8.4'
+          - dependencies: prefer-lowest
+            driver: mysql
+            php: '8.4'
+          - dependencies: prefer-lowest
+            driver: mariadb
+            php: '8.4'
+          - dependencies: prefer-lowest
+            driver: pgsql
+            php: '8.4'
+        php: ['8.4', '8.5', '8.6']
+
+    env:
+      DB_COLLATION: ${{ matrix.driver == 'mysql' && 'utf8mb4_0900_ai_ci' || 'utf8mb4_unicode_ci' }}
+      DB_CONNECTION: ${{ matrix.driver }}
+      DB_DATABASE: ${{ matrix.driver == 'sqlite' && ':memory:' || 'search_syntax' }}
+      DB_HOST: 127.0.0.1
+      DB_PASSWORD: search_syntax
+      DB_PORT: ${{ matrix.driver == 'pgsql' && '5432' || '3306' }}
+      DB_USERNAME: search_syntax
+
+    services:
+      mariadb:
+        image: ${{ matrix.driver == 'mariadb' && 'mariadb@sha256:5e73baf8179b29f115101bb102763a47a017361f3e9792daccba6646c3ab1532' || '' }} # mariadb:11.4
+        env:
+          MARIADB_DATABASE: search_syntax
+          MARIADB_PASSWORD: search_syntax
+          MARIADB_ROOT_PASSWORD: search_syntax_root
+          MARIADB_USER: search_syntax
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+      mysql:
+        image: ${{ matrix.driver == 'mysql' && 'mysql@sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902' || '' }} # mysql:8.4
+        env:
+          MYSQL_DATABASE: search_syntax
+          MYSQL_PASSWORD: search_syntax
+          MYSQL_ROOT_PASSWORD: search_syntax_root
+          MYSQL_USER: search_syntax
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+      pgsql:
+        image: ${{ matrix.driver == 'pgsql' && 'postgres@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6' || '' }} # postgres:18
+        env:
+          POSTGRES_DB: search_syntax
+          POSTGRES_PASSWORD: search_syntax
+          POSTGRES_USER: search_syntax
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U search_syntax -d search_syntax"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Set up PHP
+        uses: hosmelq/.github/.github/actions/php-setup@32f4a95b53649f1634b195193a61bb56a6b26d50 # main
+        with:
+          php-tools: cs2pr
+          php-version: ${{ matrix.php }}
+        env:
+          fail-fast: true
+
+      - name: Install composer dependencies
+        env:
+          DEPENDENCIES: ${{ matrix.dependencies }}
+        run: composer update --no-interaction --no-progress --prefer-dist --prefer-stable --"$DEPENDENCIES"
+
+      - name: Installed dependencies
+        run: composer show -D
+
+      - name: Set up problem matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Run tests
+        run: composer test
