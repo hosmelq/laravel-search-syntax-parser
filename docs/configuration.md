@@ -43,4 +43,4 @@ $search = Search::make()
 
 You can also use these methods in the callback passed to `whereSearch()` or the [form request rule](advanced-usage/validation).
 
-See the [core query limits](https://hosmelq.com/docs/search-syntax-parser/advanced-usage/query-limits-and-untrusted-input) for how clauses and depth are counted. Fields, term targets, sorting, and time zones belong to the [search definition](basic-usage/defining-a-search).
+See the [core query limits](https://hosmelq.com/docs/search-syntax-parser/v3/advanced-usage/query-limits-and-untrusted-input/) for how clauses and depth are counted. Fields, term targets, sorting, and time zones belong to the [search definition](basic-usage/defining-a-search).

@@ -100,13 +100,13 @@ Route::get('/products/search', fn (): Search => Search::make()
     ->sorts(['name', AllowedSort::field('created', 'created_at')]));
 ```
 
-The JSON is the core's [parser description](https://hosmelq.com/docs/search-syntax-parser/basic-usage/directives-and-sorting#describe-available-settings), without the fields the current user may not use. It has a `fields` list of [field descriptions](https://hosmelq.com/docs/search-syntax-parser/basic-usage/field-validation-and-value-types#describe-fields) and a `sorts` list with each sort's public `name` and default `direction`. Columns, JSON paths, relations, scopes, and other database targets are never included.
+The JSON is the core's [parser description](https://hosmelq.com/docs/search-syntax-parser/v3/basic-usage/directives-and-sorting/#describe-available-settings), without the fields the current user may not use. It has a `fields` list of [field descriptions](https://hosmelq.com/docs/search-syntax-parser/v3/basic-usage/field-validation-and-value-types/#describe-fields) and a `sorts` list with each sort's public `name` and default `direction`. Columns, JSON paths, relations, scopes, and other database targets are never included.
 
 To describe a model's search, declare its `searchSyntax()` method public and return `new Product()->searchSyntax(Search::make())`.
 
 ## Filter collections
 
-Use the core's [matcher](https://hosmelq.com/docs/search-syntax-parser/basic-usage/matching-records) with a collection's `filter()` method to search records already in memory:
+Use the core's [matcher](https://hosmelq.com/docs/search-syntax-parser/v3/basic-usage/matching-records/) with a collection's `filter()` method to search records already in memory:
 
 ```php
 use HosmelQ\SearchSyntaxParser\Query\Matcher;

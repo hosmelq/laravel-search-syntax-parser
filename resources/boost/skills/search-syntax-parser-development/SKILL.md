@@ -238,7 +238,7 @@ $field = Field::integer('quantity')
 
 The adapter translates the core's `SearchParser::compile()` clause tree. A resolver is a closure or a `Resolver` implementation. The clause holds the `operator`, already complemented for NOT, the storage `value`, the `negated` and `text` flags, and `fullText` word data. LIKE values are core `TextPattern` objects: bind `toLike()` with the matching SQL escape. `Clause::positive()` recovers a positive predicate. Restrict the field to the clause shapes the resolver handles, and add a predicate on every call, since an empty group adds no SQL. `$context->complement($query, $positive)` excludes every row a positive callback matches, including rows where SQL NOT yields NULL.
 
-Handle date existence clauses directly. For other format-less date clauses, use the core's [date helpers](https://hosmelq.com/docs/search-syntax-parser/advanced-usage/compiling-clauses#resolve-date-intervals): `DateBounds::forClause()` resolves positive intervals and `toStorage()` converts their zone and precision. Apply complements and missing-value behavior in SQL.
+Handle date existence clauses directly. For other format-less date clauses, use the core's [date helpers](https://hosmelq.com/docs/search-syntax-parser/v3/advanced-usage/compiling-clauses/#resolve-date-intervals): `DateBounds::forClause()` resolves positive intervals and `toStorage()` converts their zone and precision. Apply complements and missing-value behavior in SQL.
 
 ## Testing
 

@@ -26,7 +26,7 @@ $search = Search::make()->fields([
 
 An ability name calls `Gate::allows()` without extra arguments. A closure receives `Auth::user()`, which may be `null`, and returns a boolean.
 
-Each field's authorization is evaluated at most once per search invocation, through the core's [field authorization](https://hosmelq.com/docs/search-syntax-parser/basic-usage/field-validation-and-value-types#authorize-fields). Reusing a `Search` therefore evaluates permissions again for the current user.
+Each field's authorization is evaluated at most once per search invocation, through the core's [field authorization](https://hosmelq.com/docs/search-syntax-parser/v3/basic-usage/field-validation-and-value-types/#authorize-fields). Reusing a `Search` therefore evaluates permissions again for the current user.
 
 ## Exclude denied fields
 

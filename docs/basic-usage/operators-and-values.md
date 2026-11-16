@@ -4,7 +4,7 @@ description: "Compare values, match lists and ranges, check existence, and combi
 weight: 3
 ---
 
-The package uses the query language of the core package. This page shows how each clause becomes SQL. [Query syntax](https://hosmelq.com/docs/search-syntax-parser/basic-usage/query-syntax) in the core documentation covers the full grammar.
+The package uses the query language of the core package. This page shows how each clause becomes SQL. [Query syntax](https://hosmelq.com/docs/search-syntax-parser/v3/basic-usage/query-syntax/) in the core documentation covers the full grammar.
 
 ## Compare values
 

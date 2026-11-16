@@ -62,7 +62,7 @@ Resolvers receive `HosmelQ\SearchSyntaxParser\Query\Clause` from the core parser
 
 `Query\Operator` includes equality, ordering, list, range, existence, and LIKE variants. `complement()` returns the inverse. `Clause::positive()` recovers the positive clause while preserving its other properties. `Query\Bounds` has inclusive `from` and `to` endpoints; a `null` endpoint is open.
 
-The core [clause compiler](https://hosmelq.com/docs/search-syntax-parser/advanced-usage/compiling-clauses) prepares values, operators, and text metadata, including positional array conversions. Two open range bounds become existence clauses; text without words becomes a constant group before a resolver is called. It also supplies their `ClauseGroup` tree through `SearchParser::compile()`; this package translates the tree into SQL.
+The core [clause compiler](https://hosmelq.com/docs/search-syntax-parser/v3/advanced-usage/compiling-clauses/) prepares values, operators, and text metadata, including positional array conversions. Two open range bounds become existence clauses; text without words becomes a constant group before a resolver is called. It also supplies their `ClauseGroup` tree through `SearchParser::compile()`; this package translates the tree into SQL.
 
 `Field::comparisonType($value)`, `comparesNumbers()`, `getAllowedValues()`, `getValueType()`, `isDate()`, and `isCalendarDate()` expose the core comparison contract. Use `keyOf($clause->field)` to extract a dynamic key.
 
@@ -70,7 +70,7 @@ The context exposes the field definition, connection driver, resolved user `Date
 
 ## Resolve date intervals
 
-Handle date existence operators directly. For other format-less date clauses, use `DateBounds::forClause($clause, $context->timezone, $context->now)` from `HosmelQ\SearchSyntaxParser\Date`, then `toStorage($zone, $format)` on each interval. These [date helpers](https://hosmelq.com/docs/search-syntax-parser/advanced-usage/compiling-clauses#resolve-date-intervals) handle positive intervals, storage precision, and supported years; apply the clause's complement in SQL. Null storage bounds mean no matching stored value, while two open endpoints mean every present value. Custom input formats still need their own parsing.
+Handle date existence operators directly. For other format-less date clauses, use `DateBounds::forClause($clause, $context->timezone, $context->now)` from `HosmelQ\SearchSyntaxParser\Date`, then `toStorage($zone, $format)` on each interval. These [date helpers](https://hosmelq.com/docs/search-syntax-parser/v3/advanced-usage/compiling-clauses/#resolve-date-intervals) handle positive intervals, storage precision, and supported years; apply the clause's complement in SQL. Null storage bounds mean no matching stored value, while two open endpoints mean every present value. Custom input formats still need their own parsing.
 
 ## Compile values consistently
 
