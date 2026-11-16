@@ -4,12 +4,14 @@
     "license": "MIT",
     "keywords": [
         "eloquent",
+        "eloquent-filter",
         "hosmelq",
         "laravel",
+        "laravel-search",
         "laravel-search-syntax-parser",
         "php",
-        "query-parser",
         "search",
+        "search-query",
         "search-syntax",
         "search-syntax-parser"
     ],
