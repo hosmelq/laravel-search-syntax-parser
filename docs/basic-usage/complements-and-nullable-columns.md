@@ -1,5 +1,5 @@
 ---
-title: "Complements and Nullable Columns"
+title: "Complements and Nullables"
 description: "Include NULL values in negated clauses, and complement fields that search several columns."
 weight: 6
 ---
